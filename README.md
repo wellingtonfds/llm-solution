@@ -1,73 +1,132 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+# LLM Solution - Water Meter Reader
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Overview
 
-## Description
+**LLM Solution** is a project that uses a combination of AI technologies and modern web development frameworks to read and process water meter data from images. The application integrates with **Google Gemini** to utilize generative AI for image recognition, processes the data with **NestJS**, and stores it in a **PostgreSQL** database. The entire solution is containerized using **Docker** for seamless deployment and scalability.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Technologies Used
 
-## Installation
+- **NestJS**: A progressive Node.js framework for building efficient and scalable server-side applications.
+- **PostgreSQL**: An open-source relational database to store and manage the water meter readings.
+- **Google Gemini AI**: AI-powered image recognition to extract water meter numbers from images.
+- **Docker**: Used to containerize the application, ensuring consistent environments for development and production.
+- **Swagger**: Provides API documentation and testing interface, accessible at `http://localhost:3000/api`.
 
-```bash
-$ npm install
+## Directory Structure
+
+The project is divided into several modules, each handling different responsibilities of the application:
+
+```
+├── customer
+│   ├── dto
+│   ├── exceptions
+│   ├── repository
+│   ├── serialize
+│   └── types
+├── generative-ai
+│   └── (logic for Google Gemini AI integration)
+├── measure
+│   ├── dto
+│   ├── exceptions
+│   ├── repository
+│   ├── serialize
+│   ├── types
+│   └── validate
+├── shared
+│   └── dto
+├── storage
+│   └── (handles file management and storage)
+└── docker-compose.yml
 ```
 
-## Running the app
+### Module Descriptions
+
+- **customer**: Manages customer data, including types, data transfer objects (DTOs), exceptions, and serialization logic.
+- **generative-ai**: Handles the integration with Google Gemini AI to read water meter images.
+- **measure**: Manages the processing of water meter readings, including validation, repository logic, and serialization.
+- **shared**: Contains shared DTOs used across the application.
+- **storage**: Responsible for handling file uploads and managing storage.
+
+## Prerequisites
+
+- **Node.js** (v16+)
+- **PostgreSQL** (v12+)
+- **Docker** (v20+)
+
+## Getting Started
+
+1. **Clone the repository**:
+
+   ```bash
+   git clone https://github.com/yourusername/llm-solution.git
+   cd llm-solution
+   ```
+
+2. **Install dependencies**:
+
+   ```bash
+   npm install
+   ```
+
+3. **Set up environment variables**:
+
+   Create a `.env` file in the root directory and configure your database connection and API keys.
+
+   ```env
+   DATABASE_URL=postgres://myuser:mypassword@db:5432/mydatabase
+   GOOGLE_GEMINI_API_KEY=your-google-gemini-api-key
+   ```
+
+4. **Run Docker**:
+
+   Ensure Docker is running, then use `docker-compose` to start the services.
+
+   ```bash
+   docker-compose up --build
+   ```
+
+5. **Apply Prisma Migrations**:
+
+   After starting the container, apply the migrations to the PostgreSQL database:
+
+   ```bash
+   docker-compose exec app npx prisma migrate deploy
+   ```
+
+6. **Access the application**:
+
+   The application will be running at `http://localhost:3000`.
+
+## API Endpoints
+
+The API exposes several endpoints for managing customers and processing water meter readings.
+
+- **POST /upload**: Upload a water meter image for reading..
+- **PATH /confirm**: Confirme de measure value.
+- **GET /:id/list**: Retrieves a list of measures
+- **GET /file/:id**: Retrieve a temporary file
+
+## Swagger Documentation
+
+Swagger provides an interactive API documentation at:
+
+- **URL**: `http://localhost:3000/api`
+
+You can use Swagger to explore the available API endpoints and test them directly from your browser.
+
+## Testing
+
+To run tests, use the following command:
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+npm run test
 ```
 
-## Test
+## Contributing
 
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+If you want to contribute to this project, feel free to open a pull request. We welcome any improvements and bug fixes.
 
 ## License
 
-Nest is [MIT licensed](LICENSE).
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
