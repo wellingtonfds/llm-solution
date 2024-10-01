@@ -10,8 +10,8 @@ import { CustomerNotFoundExceptionFilter } from './exceptions/filter/customer-no
 import { CustomerListMeasuresInterceptor } from './serialize/customer-list-measures.serialize';
 
 
-@Controller('costumer')
-@ApiTags('Costumer')
+@Controller('')
+@ApiTags('Customer')
 export class CustomerController {
   constructor(private readonly customerService: CustomerService) { }
 
@@ -32,12 +32,13 @@ export class CustomerController {
   @ApiQuery({
     name: 'measure_type',
     enum: MeasureType,
+    type: 'enum',
+    enumName: 'MeasureType',
     required: false,
-    type: 'string',
     description: 'Tipo de leitura (Medição, Amostra)'  // Lista de valores possíveis
   })
   @Get(':id/list')
-  public async findOne(@Param('id') id: string, @Query('measure_type') { measure_type }: CustomerListMeasuresTypeDto) {
+  public async findOne(@Param('id') id: string, @Query() { measure_type }: CustomerListMeasuresTypeDto) {
     const data = await this.customerService.listMeasureByCustomerCode(id, measure_type);
     return data
   }
