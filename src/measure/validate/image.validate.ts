@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { ValidationArguments, ValidatorConstraint, ValidatorConstraintInterface } from "class-validator";
-import { validateType } from "src/shared/local-file-maneger";
+import { validateType } from "../../shared/local-file-maneger";
 
 @ValidatorConstraint({ name: 'ImageValidate', async: true })
 @Injectable()

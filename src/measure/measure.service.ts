@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Measure } from '@prisma/client';
-import { storeImage } from 'src/shared/local-file-maneger';
 import { GenerativeAiService } from '../generative-ai/generative-ai.service';
+import { storeImage } from '../shared/local-file-maneger';
 import { CreateMeasureDto } from './dto/create-measure.dto';
 import { UpdateMeasureDto } from './dto/update-measure.dto';
 import { DoubleReporteException } from './exceptions/double-report.exception';
