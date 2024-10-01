@@ -24,7 +24,7 @@ RUN pnpm install
 #RUN ./generate_pkey.sh  # Generate the private key
 
 # Build the application
-# RUN pnpm prisma generate
-# RUN pnpm build
+RUN pnpm prisma generate
+RUN pnpm build
 # Start the application
 CMD ["pnpm", "start:prod"]

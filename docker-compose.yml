@@ -4,16 +4,17 @@ services:
     container_name: postgres-db
     restart: always
     environment:
-      POSTGRES_DB: ${DB_NAME}
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: 'llmbackend'
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: 'llm-37121322'
     ports:
-      - '5432:${DB_PORT}'
+      - '5432:5432'
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U ${DB_USER} -d ${DB_NAME} -h to-backend-postgres -p 5432']
+      test: ['CMD-SHELL', 'pg_isready -U postgres -d llmbackend -h to-backend-postgres -p 5432']
       interval: 10s
       timeout: 5s
       retries: 5
+    
     networks:
       - app-network
   payment_services:
@@ -26,9 +27,11 @@ services:
     ports:
       - "3000:3000"
     environment:
-      DATABASE_URL: ${DATABASE_URL}
+      DATABASE_URL: 'postgresql://postgres:llm-37121322@db:5432/llmbackend'
     depends_on:
       - db
+    networks:
+      - app-network
 networks:
   app-network:
     driver: bridge

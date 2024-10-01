@@ -3,7 +3,7 @@ import { Response } from 'express';
 import { DoubleReporteException } from '../double-report.exception';
 
 
-@Catch()
+@Catch(DoubleReporteException)
 export class DoubleReportExceptionFilter implements ExceptionFilter {
 
     catch(exception: DoubleReporteException, host: ArgumentsHost) {
