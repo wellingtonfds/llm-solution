@@ -1,12 +1,14 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { MeasureType } from "@prisma/client";
 import { Type } from "class-transformer";
-import { IsDate, IsNotEmpty } from 'class-validator';
+import { IsDate, IsNotEmpty, Validate } from 'class-validator';
+import { ImageValidate } from "../validate/image.validate";
 
 export class CreateMeasureDto {
 
     @ApiProperty()
     @IsNotEmpty()
+    @Validate(ImageValidate)
     image: string;
 
     @ApiProperty()

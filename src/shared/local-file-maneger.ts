@@ -6,8 +6,6 @@ import { writeFileSync } from "fs";
 export enum FileExtension {
     'image/png' = 'png',
     'image/jpeg' = 'jpeg',
-    'image/gif' = 'gif',
-    'image/svg+xml' = 'svg',
     'image/webp' = 'webp',
 }
 
@@ -32,4 +30,9 @@ export function storeImage(image: string): StoreImageResponse {
         mimeType: imageMime,
         extension,
     }
+}
+
+export function validateType(image: string) {
+    const imageMime = getImageMime(image)
+    return Object.values(FileExtension).includes(FileExtension[imageMime])
 }

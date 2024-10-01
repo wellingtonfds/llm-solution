@@ -39,8 +39,7 @@ export class CustomerController {
   })
   @Get(':id/list')
   public async findOne(@Param('id') id: string, @Query() { measure_type }: CustomerListMeasuresTypeDto) {
-    const data = await this.customerService.listMeasureByCustomerCode(id, measure_type);
-    return data
+    return this.customerService.listMeasureByCustomerCode(id, measure_type);
   }
 
 }

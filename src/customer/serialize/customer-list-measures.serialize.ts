@@ -25,8 +25,8 @@ export class CustomerListMeasuresInterceptor implements NestInterceptor {
                     }))
                 }
                 return plainToClass(CustomerListDTO, payload, {
-                    excludeExtraneousValues: true, // remove fields that are not in the DTO
-                    exposeUnsetFields: false, // remove fields with value of undefined
+                    excludeExtraneousValues: true,
+                    exposeUnsetFields: false,
                 });
             }),
         );

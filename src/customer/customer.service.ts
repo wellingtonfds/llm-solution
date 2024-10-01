@@ -7,7 +7,6 @@ import { CustomerWithMeasure } from './types/customer-with-measures';
 export class CustomerService {
 
     constructor(private customerRepository: CustomerRepository) {
-
     }
     public async listMeasureByCustomerCode(costumerId: string, measure_type: MeasureType): Promise<CustomerWithMeasure> {
         return this.customerRepository.listMeasureByCustomerCode(costumerId, measure_type)
