@@ -1,4 +1,4 @@
-import { Body, Controller, Patch, Post, Res, UseFilters, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post, Res, UseFilters, UseInterceptors } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiConflictResponse, ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { BadRequestDto } from '../shared/dto/bad-request-dto';
@@ -10,6 +10,8 @@ import { UpdateMeasureDto } from './dto/update-measure.dto';
 import { DoubleReporteException } from './exceptions/double-report.exception';
 import { DoubleReportExceptionFilter } from './exceptions/filter/double-report-execption.filter';
 
+import { Response } from 'express';
+import { join } from 'node:path';
 import { MeasureDoubleConfirmationExceptionFilter } from './exceptions/filter/measure-double-confirmation-execption.filter';
 import { MeasureNotFoundExceptionFilter } from './exceptions/filter/measure-not-found-exception.filter';
 import { MeasureDoubleConfirmationException } from './exceptions/measure-double-confirmation.exception';
@@ -69,5 +71,10 @@ export class MeasureController {
   async confirme(@Body() updateMeasureDto: UpdateMeasureDto, @Res() response) {
     await this.measureService.confirme(updateMeasureDto)
     return response.ok((new UpdateMeasureSuccessDto()).success === true)
+  }
+
+  @Get('file')
+  showFile(@Res() res: Response) {
+    return res.sendFile(join(`${process.cwd()}/src/storage/84de2b8e-e3c1-48bc-aab0-7897460665dc.jpeg`));
   }
 }
