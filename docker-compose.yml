@@ -32,6 +32,10 @@ services:
       - db
     networks:
       - app-network
+    command: >
+      sh -c "npx prisma migrate deploy && 
+      npm run start:prod
+      "
 networks:
   app-network:
     driver: bridge
