@@ -1,5 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Measure } from '@prisma/client';
+import { storeImage } from 'src/shared/local-file-maneger';
+import { GenerativeAiService } from '../generative-ai/generative-ai.service';
 import { CreateMeasureDto } from './dto/create-measure.dto';
 import { UpdateMeasureDto } from './dto/update-measure.dto';
 import { DoubleReporteException } from './exceptions/double-report.exception';
@@ -10,8 +12,9 @@ import { MeasureWithCustomer } from './types/measure-with-costumer';
 @Injectable()
 export class MeasureService {
 
-  constructor(private measureRepository: MeasureRepository) { }
-  async create(createMeasureDto: CreateMeasureDto): Promise<MeasureWithCustomer> {
+  constructor(private readonly measureRepository: MeasureRepository, private readonly generativeAiService: GenerativeAiService) { }
+
+  async validateCreate(createMeasureDto: CreateMeasureDto): Promise<void> {
 
     const checkExiste = await this.measureRepository.findByCustomerIdAndMeasureDateAndType(
       createMeasureDto.customer_code,
@@ -20,16 +23,17 @@ export class MeasureService {
     if (checkExiste.length) {
       throw new DoubleReporteException()
     }
-    return this.measureRepository.create(createMeasureDto)
-
   }
 
-  findAll() {
-    return `This action returns all measure`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} measure`;
+  async create(createMeasureDto: CreateMeasureDto): Promise<MeasureWithCustomer> {
+    await this.validateCreate(createMeasureDto)
+    const file = storeImage(createMeasureDto.image)
+    const response = await this.generativeAiService.generateContent(file.path, file.mimeType)
+    return this.measureRepository.create({
+      ...createMeasureDto,
+      image: file.path,
+      measure_value: response
+    })
   }
 
   public async confirme(updateMeasureDto: UpdateMeasureDto): Promise<Measure> {

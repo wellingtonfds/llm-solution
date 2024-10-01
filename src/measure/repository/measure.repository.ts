@@ -6,7 +6,7 @@ import { MeasureWithCustomer } from "../types/measure-with-costumer";
 
 export class MeasureRepository extends PrismaClient {
 
-    public async create({ customer_code, measure_datetime, ...createMeasureDto }: CreateMeasureDto): Promise<MeasureWithCustomer> {
+    public async create({ customer_code, measure_datetime, measure_value, ...createMeasureDto }: CreateMeasureDto & { measure_value: string }): Promise<MeasureWithCustomer> {
         return this.measure.create({
             include: {
                 customer: true
@@ -15,6 +15,7 @@ export class MeasureRepository extends PrismaClient {
                 image_url: createMeasureDto.image,
                 measure_type: createMeasureDto.measure_type,
                 measure_datetime,
+                measure_value,
                 customer: {
                     connectOrCreate: {
                         where: {

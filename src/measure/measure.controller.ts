@@ -1,8 +1,7 @@
-import { Body, Controller, Get, Patch, Post, Res, UseFilters, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Patch, Post, Res, UseFilters, UseInterceptors } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiConflictResponse, ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { BadRequestDto } from '../shared/dto/bad-request-dto';
-import { storeImage } from '../shared/local-file-maneger';
 import { CreateMeasureResponseDto } from './dto/create-measure-response.dto';
 import { CreateMeasureDto } from './dto/create-measure.dto';
 import { UpdateMeasureSuccessDto } from './dto/update-measure-success.dto';
@@ -23,7 +22,9 @@ import { MeasureWithCustomer } from './types/measure-with-costumer';
 @Controller('/')
 @ApiTags('Measure')
 export class MeasureController {
-  constructor(private readonly measureService: MeasureService) { }
+  constructor(
+    private readonly measureService: MeasureService,
+  ) { }
 
 
   @Post('upload')
@@ -41,13 +42,8 @@ export class MeasureController {
   })
   @UseFilters(DoubleReportExceptionFilter)
   @UseInterceptors(CreateMeasureResponseSerializeInterceptor)
-  async create(@Body() { image, ...createMeasureDto }: CreateMeasureDto): Promise<MeasureWithCustomer> {
-
-    const filePath = storeImage(image)
-    return this.measureService.create({
-      ...createMeasureDto,
-      image: ''
-    });
+  async create(@Body() createMeasureDto: CreateMeasureDto): Promise<MeasureWithCustomer> {
+    return this.measureService.create(createMeasureDto);
   }
 
   @Patch('confirm')
@@ -70,7 +66,9 @@ export class MeasureController {
   })
   async confirme(@Body() updateMeasureDto: UpdateMeasureDto, @Res() response) {
     await this.measureService.confirme(updateMeasureDto)
-    return response.ok((new UpdateMeasureSuccessDto()).success === true)
+    const res = new UpdateMeasureSuccessDto()
+    res.success = true;
+    return response.status(HttpStatus.OK).send(res)
   }
 
   @Get('file')

@@ -10,10 +10,12 @@ export enum FileExtension {
     'image/svg+xml' = 'svg',
     'image/webp' = 'webp',
 }
+
+export type mimeType = 'image/png' | 'image/jpeg' | 'image/webp'
 interface StoreImageResponse {
     filename: string
     path: string
-    mime: string,
+    mimeType: mimeType,
     extension: FileExtension,
 }
 export function storeImage(image: string): StoreImageResponse {
@@ -27,7 +29,7 @@ export function storeImage(image: string): StoreImageResponse {
     return {
         filename,
         path,
-        mime: imageMime,
+        mimeType: imageMime,
         extension,
     }
 }
